@@ -2,25 +2,29 @@ from dotenv import load_dotenv
 import requests
 import os
 import json
+import time
 
 load_dotenv()
 
 api_key=os.getenv("NEXTDNS_API_KEY")
 profile_id=os.getenv("NEXTDNS_PROFILE_ID")
 
-url = f"https://api.nextdns.io/profiles/{profile_id}/analytics/status"
 
-headers={
-    "X-Api-Key": api_key
+def get_data():
+
+    url = f"https://api.nextdns.io/profiles/{profile_id}/analytics/status"
+
+    headers={
+        "X-Api-Key": api_key
     }
 
-response=requests.get(url,headers=headers)
+    response = requests.get(url,headers=headers)
 
-if response.status_code!=200:
-    print("API request failed")
-    exit()
+    if response.status_code!=200:
+        print("API request failed")
+        exit()
 
-data=response.json()
+    return response.json()
 
 
 def get_stats(data):
@@ -41,7 +45,7 @@ def get_stats(data):
 
 def show_stats(total_queries,blocked_queries):
     total=total_queries+blocked_queries
-    percentage=blocked_queries/total_queries*100
+    percentage=blocked_queries/total*100
 
     print("====== NextDNS Stats ======")
     print(f"Allowed: {total_queries}")
@@ -49,7 +53,8 @@ def show_stats(total_queries,blocked_queries):
     print(f"Total queries: {total}")
     print(f"Blocked percentage: {percentage:.2f}%")
 
-
-total_queries, blocked_queries=get_stats(data)
-
-show_stats(total_queries,blocked_queries)
+while True:
+    data=get_data()
+    total_queries, blocked_queries=get_stats(data)
+    show_stats(total_queries, blocked_queries)
+    time.sleep(60)
