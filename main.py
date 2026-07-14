@@ -19,11 +19,16 @@ def get_data():
         "X-Api-Key": api_key
     }
 
-    response = requests.get(url,headers=headers)
+    try:
+        response=requests.get(url, headers=headers, timeout=10)
+
+    except requests.exceptions.RequestException:
+        return None
+
 
     if response.status_code!=200:
-        print("API request failed")
-        exit()
+        print(f"API request failed: {response.status_code}")
+        return None
 
     return response.json()
 
@@ -58,6 +63,11 @@ def show_stats(total_queries,blocked_queries):
 
 while True:
     data=get_data()
-    total_queries, blocked_queries=get_stats(data)
-    show_stats(total_queries, blocked_queries)
+    if data:
+        total_queries,blocked_queries=get_stats(data)
+        show_stats(total_queries,blocked_queries)
+
+    else:
+        print("Unable to fetch NextDNS data")
+
     time.sleep(60)
