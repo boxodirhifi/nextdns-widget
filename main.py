@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 from datetime import datetime
+from nextdns import get_data
 import requests
 import os
 import time
@@ -9,27 +10,6 @@ load_dotenv()
 api_key=os.getenv("NEXTDNS_API_KEY")
 profile_id=os.getenv("NEXTDNS_PROFILE_ID")
 
-
-def get_data():
-
-    url = f"https://api.nextdns.io/profiles/{profile_id}/analytics/status"
-
-    headers={
-        "X-Api-Key": api_key
-    }
-
-    try:
-        response=requests.get(url, headers=headers, timeout=10)
-
-    except requests.exceptions.RequestException:
-        return None
-
-
-    if response.status_code!=200:
-        print(f"API request failed: {response.status_code}")
-        return None
-
-    return response.json()
 
 
 def get_stats(data):
@@ -64,7 +44,7 @@ def show_stats(total_queries,blocked_queries):
 
 def main():
     while True:
-        data=get_data()
+        data=get_data(api_key,profile_id)
         if data:
             total_queries,blocked_queries=get_stats(data)
             show_stats(total_queries,blocked_queries)
