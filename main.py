@@ -38,15 +38,18 @@ def get_stats(data):
     return total_queries, blocked_queries
 
 
+
+def show_stats(total_queries,blocked_queries):
+    total=total_queries+blocked_queries
+    percentage=blocked_queries/total_queries*100
+
+    print("====== NextDNS Stats ======")
+    print(f"Allowed: {total_queries}")
+    print(f"Blocked: {blocked_queries}")
+    print(f"Total queries: {total}")
+    print(f"Blocked percentage: {percentage:.2f}%")
+
+
 total_queries, blocked_queries=get_stats(data)
 
-
-total= total_queries+blocked_queries
-percentage=blocked_queries/total*100
-
-
-print(f"Allowed: {total_queries}")
-print(f"Blocked: {blocked_queries}")
-
-print(f"Total queries: {total}")
-print(f"Blocked percentage: {percentage:.2f}%")
+show_stats(total_queries,blocked_queries)
