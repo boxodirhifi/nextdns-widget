@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from datetime import datetime
 import requests
 import os
 import json
@@ -46,8 +47,10 @@ def get_stats(data):
 def show_stats(total_queries,blocked_queries):
     total=total_queries+blocked_queries
     percentage=blocked_queries/total*100
+    current_time=datetime.now().strftime("%H:%M:%S")
 
     print("====== NextDNS Stats ======")
+    print(f"Last updated: {current_time}")
     print(f"Allowed: {total_queries}")
     print(f"Blocked: {blocked_queries}")
     print(f"Total queries: {total}")
