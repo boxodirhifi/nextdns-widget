@@ -1,3 +1,4 @@
+import json
 def get_stats(data):
 
     total_queries=0
@@ -11,3 +12,17 @@ def get_stats(data):
             total_queries=item["queries"]
 
     return total_queries, blocked_queries
+
+def save_json(total_queries, blocked_queries):
+    total = total_queries + blocked_queries
+    percentage = (blocked_queries / total * 100) if total else 0
+
+    data = {
+        "allowed": total_queries,
+        "blocked": blocked_queries,
+        "total": total,
+        "percentage": round(percentage, 2)
+    }
+
+    with open("stats.json", "w") as file:
+        json.dump(data, file)

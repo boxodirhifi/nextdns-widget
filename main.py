@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from nextdns import get_data
-from stats import get_stats
+from stats import get_stats, save_json
 from display import show_stats
 import argparse
 import json
@@ -41,6 +41,7 @@ def main():
         data=get_data(api_key,profile_id)
         if data:
             total_queries,blocked_queries=get_stats(data)
+            save_json(total_queries,blocked_queries)
 
         else:
             print("Unable to fetch NextDNS data")
