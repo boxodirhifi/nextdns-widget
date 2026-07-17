@@ -1,4 +1,6 @@
 import json
+from datetime import datetime
+
 def get_stats(data):
 
     total_queries=0
@@ -21,7 +23,8 @@ def save_json(total_queries, blocked_queries):
         "allowed": total_queries,
         "blocked": blocked_queries,
         "total": total,
-        "percentage": round(percentage, 2)
+        "percentage": round(percentage, 2),
+        "updated": datetime.now().strftime("%H:%M:%S")
     }
 
     with open("stats.json", "w") as file:
