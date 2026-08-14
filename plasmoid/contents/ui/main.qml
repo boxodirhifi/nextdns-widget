@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import org.kde.plasma.plasma5support as Plasma5Support
 import org.kde.plasma.plasmoid
 import org.kde.kirigami as Kirigami
 
@@ -13,44 +14,31 @@ PlasmoidItem {
     property string updated: "--:--:--"
     property string errorMsg: ""
 
-    Timer {
-        id: statsTimer
+    Plasma5Support.DataSource {
+        id: statsData
+        engine: "executable"
+        connectedSources: [
+            Qt.resolvedUrl("../../read-stats.sh").toString().replace("file://", "")
+        ]
         interval: 5000
-        running: true
-        repeat: true
 
-        onTriggered: readStats()
+        onNewData: function(sourceName, data) {
 
-        Component.onCompleted: readStats()
-    }
+            try {
+                var stdout = String(data["stdout"] || "")
 
-    function readStats() {
-        var xhr = new XMLHttpRequest()
+                var json = JSON.parse(stdout)
 
-        xhr.open("GET", "file:///home/yuta/nextdns-widget/stats.json")
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState !== XMLHttpRequest.DONE)
-                return
-
-                if (xhr.status === 0 || xhr.status === 200) {
-                    try {
-                        var json = JSON.parse(xhr.responseText)
-
-                        root.allowed = json.allowed
-                        root.blocked = json.blocked
-                        root.total = json.total
-                        root.percentage = json.percentage
-                        root.updated = json.updated
-                        root.errorMsg = ""
-                    } catch (e) {
-                        root.errorMsg = "JSON Parse Error"
-                    }
-                } else {
-                    root.errorMsg = "Unable to read stats"
-                }
+                root.allowed = json.allowed
+                root.blocked = json.blocked
+                root.total = json.total
+                root.percentage = json.percentage
+                root.updated = json.updated || "--:--:--"
+                root.errorMsg = ""
+            } catch (e) {
+                root.errorMsg = "JSON Parse Error"
+            }
         }
-
-        xhr.send()
     }
 
     preferredRepresentation: fullRepresentation
