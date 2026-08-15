@@ -20,7 +20,7 @@ PlasmoidItem {
         connectedSources: [
             Qt.resolvedUrl("../../read-stats.sh").toString().replace("file://", "")
         ]
-        interval: 5000
+        interval: 62000
 
         onNewData: function(sourceName, data) {
 
