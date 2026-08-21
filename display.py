@@ -11,5 +11,5 @@ def show_stats(total_queries,blocked_queries):
     print(f"║ Allowed: {total_queries:<21}║")
     print(f"║ Blocked: {blocked_queries:<21}║")
     print(f"║ Total: {total:<23}║")
-    print(f"║ Block rate: {percentage:.2f}%{'':<12}║")
+    print(f"║ Block rate: {percentage:.2f}%{'':<12} ║")
     print("╚═══════════════════════════════╝")

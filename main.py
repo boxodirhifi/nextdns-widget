@@ -17,7 +17,7 @@ profile_id=os.getenv("NEXTDNS_PROFILE_ID")
 
 def output_json(total_queries,blocked_queries):
     total = total_queries+blocked_queries
-    percentage=(blocked_queries/total*100) if total else 0
+    percentage=(blocked_queries/total*100) if total else 0.0
 
     data={
         "allowed": total_queries,
@@ -55,5 +55,5 @@ def main():
 
         time.sleep(60)
 
-if  __name__=="__main__":
+if __name__=="__main__":
     main()
