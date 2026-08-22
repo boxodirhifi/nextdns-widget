@@ -37,6 +37,9 @@ def main():
     args=parser.parse_args()
 
 
+    total_queries=0
+    blocked_queries=0
+
     while True:
         data=get_data(api_key,profile_id)
         if data:
